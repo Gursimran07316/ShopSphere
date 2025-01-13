@@ -1,0 +1,110 @@
+﻿@model SalesViewModel
+<div class="row">
+    @section title {
+<div class="col-7"><h3>Cashier's console</h3></div>
+<div class="col-2"><label for="cashier">Cashier Name:</label></div>
+<div class"col-3>@*Display cashier name*@</div>"
+    }
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="text-danger" asp-validation-summary="All"></div>
+            <select asp-for="SelectedCategoryId" class="form-control">
+                <option>-Please-select-</option>
+                @if (Model.Categories != null && Model.Categories.Count() > 0)
+                {
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <option value="@cat.CategoryId">@cat.Name</option>
+                    }
+                }
+            </select>
+       <br />
+        <div id="products-partail">
+            @*Show product list*@
+        </div>
+        <br />
+        <div id="products-details">
+            @*Show product details*@
+        </div>
+            @*Product form*@
+     
+            <form asp-controller="sales" asp-action="sell" method="post" id="products-form">
+           
+            <input type="hidden" asp-for="SelectedPoductId"  />
+            <div class="form-group">
+         
+                <label asp-for="QuantoityToSell" class="col-form-label"></label>
+          
+
+            
+                <input type="number" asp-for="QuantoityToSell" class="form-control"   />
+              
+        </div>
+        <div class="form-group">
+           
+                <button type="submit" class="btn btn-primary">Save</button>
+            
+                </<div>
+
+                </div>
+            <div class="col-6">
+            </div>
+    </div>
+    <div class="col">
+        @*List of transactions  *@
+        @await Component.InvokeAsync("Transactions","cashier1")
+    </div>
+</form>
+</div>
+</div>
+@section javascript {
+    <script>
+                const form = document.querySelector("#products-form")
+                form.style.display = "none";
+                let selectedCategoryId = document.querySelector("#SelectedCategoryId").value;
+               
+             if(selectedCategoryId>0){
+                    form.style.display = "none";
+                    console.log(selectedCategoryId)
+                    $('#products-partail').load('/products/ProductsByCategoryPartial', { categoryId: selectedCategoryId })
+
+                    $('#products-details').html("")
+             }
+                
+              
+                document.querySelector("select").addEventListener('change',(e) => {
+                    form.style.display = "none";
+                    console.log(e.target.value)
+                 $('#products-partail').load('/products/ProductsByCategoryPartial', { categoryId: e.target.value })
+
+            $('#products-details').html("")
+               
+           
+        
+           
+        })
+        var p = document.querySelector("#products-partail")
+        p.addEventListener("click",(e)=>{
+         p.querySelectorAll(".product-row").forEach(r => {
+             
+            r.addEventListener('click', (e => {
+                const el = e.srcElement.parentElement;
+                    p.querySelectorAll(".product-row").forEach(a => a.classList.remove("highlight"))
+                     el.classList.add("highlight")
+                            let productId = el.getAttribute("product-id")
+                    $('#products-details').load('sales/SelectedProductPartial', { productId: productId })
+                            
+                if (productId > 0) {
+                                $("#SelectedPoductId").val(productId)
+                                form.style.display = "block";
+                }else{
+                                form.style.display = "none";
+                                $("#SelectedPoductId").val()
+                }
+            }))
+        })
+        })
+       
+    </script>
+}

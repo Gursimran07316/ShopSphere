@@ -1,0 +1,21 @@
+﻿@model List<CoreBusiness.Product>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>    Product Name</th>
+            <th>Quantity
+            </th>
+           
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach(var p in Model)
+        {
+            <tr class="product-row" product-id="@p.ProductId">
+                <td>@p.Name</td>
+                <td>@p.Quantity</td>
+            </tr>
+        }
+        </tbody>
+</table>

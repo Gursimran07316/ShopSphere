@@ -1,0 +1,38 @@
+﻿
+@model List<CoreBusiness.Product>
+@section title {
+    <h3>Product </h3>
+}
+@if (Model != null && Model.Count()>0){
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Category name</th>
+            <th></th>
+                <th></th>
+        </tr>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Name</td>
+                <td>@c.Quantity</td>
+                    <td>@c.Category?.Name</td>
+                  <td><a asp-controller="Products" asp-action="edit" asp-route-id="@c.ProductId">edit</a></td>
+                  <td><a asp-controller="Products" asp-action="delete" asp-route-id="@c.ProductId" onclick="return dltItem()">delete</a></td>
+            </tr>
+
+        }
+    </thead>
+</table>
+<a class="btn btn-primary" asp-action="add" asp-controller="products">Add</a>
+}
+@section javascript {
+    <script>
+        function dltItem(){
+         return   confirm("Are you sure");
+        }
+    </script>
+}
+

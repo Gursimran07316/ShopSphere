@@ -1,0 +1,36 @@
+﻿
+
+@model List<CoreBusiness.Category>
+@section title {
+    <h3>Categories </h3>
+}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            <th></th>
+            </tr>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Name</td>
+                <td>@c.Description</td>
+                <td><a asp-controller="categories" asp-action="edit" asp-route-id="@c.CategoryId">edit</a></td>
+                <td><a asp-controller="categories" asp-action="delete" asp-route-id="@c.CategoryId" onclick="return dltItem()">delete</a></td>
+            </tr>
+           
+        }
+        </thead>
+    </table>
+<a class="btn btn-primary" asp-action="add" asp-controller="categories">Add</a>
+
+@section javascript {
+   <script>
+       function dltItem(){
+        return   confirm("Are you sure");
+       }
+   </script>
+}
+
